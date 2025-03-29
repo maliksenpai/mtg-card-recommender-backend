@@ -10,17 +10,22 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/cardAi", validateRequest, async (req, res) => {
-  const data = req.body;
-  console.log(req.body);
-  if (!data) {
-    return res.status(400).json({ error: "Data is required" });
+  try {
+    const data = req.body;
+    console.log(req.body);
+    if (!data) {
+      return res.status(400).json({ error: "Data is required" });
+    }
+    const result = await getGroqChatResponse(
+      data.commander,
+      data.filter,
+      data.chatCompletion
+    );
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
-  const result = await getGroqChatResponse(
-    data.commander,
-    data.filter,
-    data.chatCompletion
-  );
-  res.json({ success: true, data: result });
 });
 
 app.listen(PORT, () => {

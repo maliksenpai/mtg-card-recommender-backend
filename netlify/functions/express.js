@@ -1,6 +1,7 @@
 const express = require("express");
-const validateRequest = require("./validator");
-const getGroqChatResponse = require("./groq");
+const validateRequest = require("../../validator");
+const getGroqChatResponse = require("../../groq");
+const serverless = require("serverless-http");
 const cors = require("cors");
 
 const app = express();
@@ -31,3 +32,5 @@ app.post("/cardAi", validateRequest, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+module.exports.handler = serverless(app);
